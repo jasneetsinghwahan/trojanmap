@@ -81,3 +81,13 @@ TEST(TrojanMapTest, FindPositioncopied) {
   std::pair<double, double> gt5(-1, -1);
   EXPECT_EQ(position, gt4);
 }
+
+// Test CalculateEditDistance function
+TEST(TrojanMapTest, CalculateEditDistancecopied) {
+  TrojanMap m;
+  EXPECT_EQ(m.CalculateEditDistance("", "ros"), 3);
+  EXPECT_EQ(m.CalculateEditDistance("ros", ""), 3);
+  EXPECT_EQ(m.CalculateEditDistance("abc", "xyz"), 3);
+  EXPECT_EQ(m.CalculateEditDistance("", ""), 0);
+  EXPECT_EQ(m.CalculateEditDistance(" ", ""), 1);
+}

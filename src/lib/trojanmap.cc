@@ -98,7 +98,37 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
  * @return {int}                    : edit distance between two strings
  */
 int TrojanMap::CalculateEditDistance(std::string a, std::string b) {     
-  return 0;
+  int alen = a.size();
+  int blen = b.size();
+  std::vector<std::vector<int>> t(alen,std::vector<int>(blen,-1));
+  return CalculateEditDistanceutil(a,b,alen-1,blen-1, t);
+}
+
+// sources:
+// https://www.youtube.com/watch?v=l02UxPYRmCQ&list=PL_z_8CaSLPWekqhdCPmFohncHwz8TY2Go&index=2
+// https://takeuforward.org/data-structure/edit-distance-dp-33/
+int 
+TrojanMap::CalculateEditDistanceutil(const std::string &a, 
+                                    const std::string &b, 
+                                    int i, int j, 
+                                    std::vector<std::vector<int>> t){
+  // base case
+  if(i < 0) return j+1;
+  if(j < 0) return i+1;
+  // memoization
+  if (t[i][j] != -1) return t[i][j];
+  // if match
+  if(a[i] == b[j])
+    return t[i][j] = 0 + CalculateEditDistanceutil(a,b,i-1,j-1,t);
+  else {
+    // else
+    // CalculateEditDistanceutil(a,b,i,j-1,t) - for insertion
+    // CalculateEditDistanceutil(a,b,i-1,j,t) - for deletion
+    // CalculateEditDistanceutil(a,b,i-1,j-1,t) - for replacement
+    t[i][j] = 1 + std::min(CalculateEditDistanceutil(a,b,i,j-1,t), 
+                            std::min(CalculateEditDistanceutil(a,b,i-1,j,t), CalculateEditDistanceutil(a,b,i-1,j-1,t)));
+    return t[i][j];
+  }
 }
 
 /**
@@ -110,11 +140,24 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
  */
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = ""; // Start with a dummy word
+  if (!name.size()) return tmp;
+  auto itr = data.begin();
+  int mindist = INT_MAX;
+  int currdist;
+  for (; itr != data.end(); ++itr){
+    std::string lcname(itr->second.name);
+    if (!lcname.size()) continue;
+    currdist = CalculateEditDistance(name,lcname);
+    if (mindist < currdist){
+      mindist = currdist;
+      tmp = lcname;
+    }
+  }
   return tmp;
 }
 
 /**
- * Autocomplete: Given a parital name return all the possible locations with
+ * Autocomplete: Given a partial name return all the possible locations with
  * partial name as the prefix. The function should be case-insensitive.
  *
  * @param  {std::string} name          : partial name
