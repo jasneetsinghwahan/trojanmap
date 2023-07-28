@@ -103,6 +103,19 @@ std::string TrojanMap::FindClosestName(std::string name) {
  */
 std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
   std::vector<std::string> results;
+  // returns an empty string if the input is empty
+  if (!name.size()) return results;
+  std::string pre(name);
+  transform(name.begin(),name.end(),pre.begin(),::tolower);
+
+  // use an iterator to iterate through the unordered map
+  auto itr = data.begin();
+  for (; itr != data.end(); ++itr){
+    // at each iteration, compare the data->second.name with the prefix
+    std::string lcname(itr->second.name);
+    transform(itr->second.name.begin(),itr->second.name.end(),lcname.begin(),::tolower); 
+    if(lcname.compare(0,pre.size(),pre) == 0) results.push_back(itr->second.name);
+  }
   return results;
 }
 
