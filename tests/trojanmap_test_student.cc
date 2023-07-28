@@ -57,3 +57,27 @@ TEST(TrojanMapTest, Autocompletecopied) {
 
 }
 
+TEST(TrojanMapTest, FindPositioncopied) {
+  TrojanMap m;
+  
+  // Test Chick-fil-A
+  auto position = m.GetPosition("First Presbyterian Church");
+  std::pair<double, double> gt1(34.0321559, -118.2722841); // groundtruth for "First Presbyterian Church"
+  EXPECT_EQ(position, gt1);
+  // Test Ralphs
+  position = m.GetPosition("Ralphs");
+  std::pair<double, double> gt2(34.0317653, -118.2908339); // groundtruth for "Ralphs"
+  EXPECT_EQ(position, gt2);
+  // Test Target
+  position = m.GetPosition("Chevron 1");
+  std::pair<double, double> gt3(34.0336409, -118.2620798); // groundtruth for "Chevron 1"
+  EXPECT_EQ(position, gt3);
+  // Test Unknown
+  position = m.GetPosition("7th & Hi");
+  std::pair<double, double> gt4(-1, -1);
+  EXPECT_EQ(position, gt4);
+  // Test empty
+  position = m.GetPosition("");
+  std::pair<double, double> gt5(-1, -1);
+  EXPECT_EQ(position, gt4);
+}

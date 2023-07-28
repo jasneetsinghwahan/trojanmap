@@ -1,4 +1,5 @@
 #include "trojanmap.h"
+//#include "mapui.h"
 
 //-----------------------------------------------------
 // TODO: Students should implement the following:
@@ -69,6 +70,24 @@ std::string TrojanMap::GetID(const std::string &name) {
  */
 std::pair<double, double> TrojanMap::GetPosition(std::string name) {
   std::pair<double, double> results(-1, -1);
+  // returns an empty string if the input is empty
+  if (!name.size()) return results;
+  auto itr = data.begin();
+  bool match = false;
+  for (; itr != data.end(); ++itr){
+    // at each iteration, compare the data->second.name with the prefix
+    if(itr->second.name.compare(0,itr->second.name.size(), name, 0,name.size()) == 0){
+      match = true;
+      break;
+    }
+  }
+  if (match){
+    results.first = itr->second.lat;
+    results.second = itr->second.lon;
+    //MapUI m;
+    //m.PlotPoint(itr->second.lat, itr->second.lon);
+  }
+
   return results;
 }
 
