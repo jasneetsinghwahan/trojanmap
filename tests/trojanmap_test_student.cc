@@ -1,5 +1,6 @@
 #include "gtest/gtest.h"
 #include "src/lib/trojanmap.h"
+#include <gmock/gmock.h>
 
 TEST(TrojanMapTest, Autocompletecopied) {
   TrojanMap m;
@@ -98,4 +99,14 @@ TEST(TrojanMapTest, FindClosestNamecopied) {
   TrojanMap m;
   EXPECT_EQ(m.FindClosestName("Rolphs"), "Ralphs");
   EXPECT_EQ(m.FindClosestName("starb uc"), "Starbucks");
+}
+
+// Test FindClosestName function
+TEST(TrojanMapTest, FindAllCategories) {
+  TrojanMap m;
+  std::vector<std::string> exp_rst = {"parcel_locker", "car_wash", "childcare", "yes", "driving_school", "dentist", "police", "charging_station", "copyshop", "theatre", "bicycle", "museum", "post_office", "library", "fuel", "hotel", "bank", "convenience", "parking", "clothes", "fast_food", "hairdresser", "restaurant", "yoga", "cafe", "clinic", "parking_entrance", "optician", "bakery", "shoes", "hospital", "beverages", "car_repair", "post_box", "tobacco", "attraction", "fountain", "confectionery", "car", "shoe_repair", "food_court", "artwork", "fabric", "gallery", "social_facility", "supermarket", "pharmacy", "department_store", "mobile_phone", "bar", "skate", "marketplace", "music", "beauty", "bicycle_rental", "bus_station", "school", "place_of_worship"};
+  std::vector<std::string> act_rst = m.GetAllCategories();
+  EXPECT_THAT(act_rst,::testing::Contains("school"));
+  //EXPECT_THAT(act_rst,::testing::ContainerEq(exp_rst));
+  EXPECT_EQ(act_rst.size(),58);
 }

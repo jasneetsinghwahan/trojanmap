@@ -205,7 +205,23 @@ std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
  * @return {std::vector<std::string>}  : all unique location categories
  */
 std::vector<std::string> TrojanMap::GetAllCategories() {
-  return {};
+  std::vector<std::string> results;
+  std::unordered_set<std::string> str_attr;
+  auto itr = data.begin();
+  for (; itr != data.end(); ++itr){
+    if(!itr->second.attributes.empty()){
+      auto itr_attr = itr->second.attributes.begin();
+      if(!(*itr_attr).empty()){
+        str_attr.insert(*itr_attr);
+      }
+    }
+  }
+  auto itr2_attr = str_attr.begin();
+  while(itr2_attr != str_attr.end()){
+    results.push_back(*itr2_attr);
+    ++itr2_attr;
+  }
+  return results;
 }
 
 /**
