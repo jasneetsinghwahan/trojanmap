@@ -100,8 +100,19 @@ std::pair<double, double> TrojanMap::GetPosition(std::string name) {
 int TrojanMap::CalculateEditDistance(std::string a, std::string b) {     
   int alen = a.size();
   int blen = b.size();
-  std::vector<std::vector<int>> t(alen,std::vector<int>(blen,-1));
-  return CalculateEditDistanceutil(a,b,alen-1,blen-1, t);
+  std::vector<std::vector<int>> t(alen+1,std::vector<int>(blen+1,0));
+  for (int i = 0; i <= alen; i++) t[i][0] = i;
+  for (int j = 0; j <= blen; j++) t[0][j] = j;
+  for (int i = 1; i < alen+1; i++){
+    for (int j = 1; j < blen+1; j++){
+      if(a[i-1] == b[j-1])
+        t[i][j] = 0 + t[i-1][j-1];
+      else
+        t[i][j] = 1 + std::min(t[i-1][j-1], std::min(t[i-1][j], t[i][j-1]));
+    }
+  }
+  return t[alen][blen];
+  //return CalculateEditDistanceutil(a,b,alen-1,blen-1, t);
 }
 
 // sources:
@@ -141,16 +152,22 @@ TrojanMap::CalculateEditDistanceutil(const std::string &a,
 std::string TrojanMap::FindClosestName(std::string name) {
   std::string tmp = ""; // Start with a dummy word
   if (!name.size()) return tmp;
+  std::string pre(name);
+  transform(name.begin(),name.end(),pre.begin(),::tolower);
   auto itr = data.begin();
   int mindist = INT_MAX;
   int currdist;
+  int i = 0;
   for (; itr != data.end(); ++itr){
+    i++;
     std::string lcname(itr->second.name);
     if (!lcname.size()) continue;
-    currdist = CalculateEditDistance(name,lcname);
-    if (mindist < currdist){
+    transform(itr->second.name.begin(),itr->second.name.end(),lcname.begin(),::tolower);
+    currdist = CalculateEditDistance(pre,lcname);
+    if(lcname == "Ralphs");
+    if (mindist > currdist){
       mindist = currdist;
-      tmp = lcname;
+      tmp = itr->second.name;
     }
   }
   return tmp;

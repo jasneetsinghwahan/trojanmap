@@ -90,4 +90,12 @@ TEST(TrojanMapTest, CalculateEditDistancecopied) {
   EXPECT_EQ(m.CalculateEditDistance("abc", "xyz"), 3);
   EXPECT_EQ(m.CalculateEditDistance("", ""), 0);
   EXPECT_EQ(m.CalculateEditDistance(" ", ""), 1);
+  EXPECT_EQ(m.CalculateEditDistance("starb uc", "starbucks"), 3);
+}
+
+// Test FindClosestName function
+TEST(TrojanMapTest, FindClosestNamecopied) {
+  TrojanMap m;
+  EXPECT_EQ(m.FindClosestName("Rolphs"), "Ralphs");
+  EXPECT_EQ(m.FindClosestName("starb uc"), "Starbucks");
 }

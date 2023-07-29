@@ -158,6 +158,7 @@ class TrojanMap {
   std::vector<bool> Queries(const std::vector<std::pair<double, std::vector<std::string>>> &q);
 
   //----------------------------------------------------- User-defined functions
+  int CalculateEditDistanceutil(const std::string &a, const std::string &b, int i, int j, std::vector<std::vector<int>> t);
 };
 
 #endif
