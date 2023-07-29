@@ -288,7 +288,23 @@ std::vector<std::string> TrojanMap::GetAllLocationsFromCategory(
  * @return {std::vector<std::string>}     : ids
  */
 std::vector<std::string> TrojanMap::GetLocationRegex(std::regex location) {
-  return {};
+  std::vector<std::string> res;
+  try {
+    auto itr = data.begin();
+    int i = 0;
+    bool match = false;
+    for (; itr != data.end(); ++itr){
+      i++;
+        if(itr->first == "9446678097"){
+          match = true;
+        }
+        if(std::regex_search(itr->first, location))
+          res.push_back(itr->first);
+    }
+  } catch (std::regex_error& e) {
+    return res; 
+  }
+  return res;
 }
 
 /**

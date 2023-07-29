@@ -140,3 +140,17 @@ TEST(TrojanMapTest, GetAllLocationsFromCategory) {
   EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
   EXPECT_EQ(act_rst.size(),3);
 }
+
+TEST(TrojanMapTest, GetLocationRegex){
+  TrojanMap m;
+  std::regex ip("9446678097");
+  std::vector<std::string> exp_rst = {"9446678097"};
+  std::vector<std::string> act_rst = m.GetLocationRegex(ip);
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),1);
+  ip = {"^94{1,2}6{1,2}7809\\d{1}"};
+  exp_rst = {"9446678097","9446678098","9446678099"};
+  act_rst = m.GetLocationRegex(ip);
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),exp_rst.size());
+}
