@@ -203,15 +203,16 @@ std::vector<std::string> TrojanMap::Autocomplete(std::string name) {
  * there should be no duplicates in the output.
  *
  * @return {std::vector<std::string>}  : all unique location categories
+ * limitation: assumed that only one attribute exists for a location
  */
 std::vector<std::string> TrojanMap::GetAllCategories() {
   std::vector<std::string> results;
   std::unordered_set<std::string> str_attr;
   auto itr = data.begin();
   for (; itr != data.end(); ++itr){
-    if(!itr->second.attributes.empty()){
+    if(!itr->second.attributes.empty()){    // if the attributes exist
       auto itr_attr = itr->second.attributes.begin();
-      if(!(*itr_attr).empty()){
+      if(!(*itr_attr).empty()){             // check not needed
         str_attr.insert(*itr_attr);
       }
     }
@@ -235,6 +236,45 @@ std::vector<std::string> TrojanMap::GetAllCategories() {
 std::vector<std::string> TrojanMap::GetAllLocationsFromCategory(
     std::string category) {
   std::vector<std::string> res;
+  // if the input string is empty, then return (-1, -1)
+  if (category.empty()) {
+    res.push_back("-1, -1");
+    return res;
+  }
+
+  // if the input category doesn't exactly matches (ignore case) then return (-1, -1)
+  std::string pre(category);
+  transform(category.begin(),category.end(),pre.begin(),::tolower);       // copy to another and convert to lower case
+  std::vector<std::string> allcategorylist = TrojanMap::GetAllCategories();
+  bool match = false;
+  for (auto it = allcategorylist.begin(); it != allcategorylist.end(); ++it){
+    std::string ith_category(*it);
+    transform(ith_category.begin(), ith_category.end(), ith_category.begin(), ::tolower);   // convert to lower case
+    if(ith_category == pre){
+      match = true;
+      break;
+    }
+  }
+  if (match == false){
+    res.push_back("-1, -1");
+    return res;
+  }
+
+  // list all the id's for the input category
+  auto itr = data.begin();
+  for (; itr != data.end(); ++itr){
+    if(!itr->second.attributes.empty()){        // if the attributes exist
+      auto eachlocattr_itr = itr->second.attributes.begin();
+      while(eachlocattr_itr != itr->second.attributes.end()){       // few locations  have multiple attributes
+        std::string lowcasename(*eachlocattr_itr);                  // attributes matching is case insensitive
+        transform(lowcasename.begin(),lowcasename.end(),lowcasename.begin(),::tolower);
+        if(lowcasename == pre){
+          res.push_back(itr->second.id);
+        }
+        ++eachlocattr_itr;
+      }
+    }
+  }
   return res;
 }
 

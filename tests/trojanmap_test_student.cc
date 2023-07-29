@@ -107,6 +107,36 @@ TEST(TrojanMapTest, FindAllCategories) {
   std::vector<std::string> exp_rst = {"parcel_locker", "car_wash", "childcare", "yes", "driving_school", "dentist", "police", "charging_station", "copyshop", "theatre", "bicycle", "museum", "post_office", "library", "fuel", "hotel", "bank", "convenience", "parking", "clothes", "fast_food", "hairdresser", "restaurant", "yoga", "cafe", "clinic", "parking_entrance", "optician", "bakery", "shoes", "hospital", "beverages", "car_repair", "post_box", "tobacco", "attraction", "fountain", "confectionery", "car", "shoe_repair", "food_court", "artwork", "fabric", "gallery", "social_facility", "supermarket", "pharmacy", "department_store", "mobile_phone", "bar", "skate", "marketplace", "music", "beauty", "bicycle_rental", "bus_station", "school", "place_of_worship"};
   std::vector<std::string> act_rst = m.GetAllCategories();
   EXPECT_THAT(act_rst,::testing::Contains("school"));
-  //EXPECT_THAT(act_rst,::testing::ContainerEq(exp_rst));
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
   EXPECT_EQ(act_rst.size(),58);
+}
+
+// Test FindClosestName function
+TEST(TrojanMapTest, GetAllLocationsFromCategory) {
+  TrojanMap m;
+  std::string categoryname = {"artwork"};
+  std::vector<std::string> exp_rst = {"2305853438","4399693645","4536993737","5237417648","6813379578"};
+  std::vector<std::string> act_rst = m.GetAllLocationsFromCategory(categoryname);
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),5);
+  categoryname = {"bank"};
+  act_rst = m.GetAllLocationsFromCategory(categoryname);
+  exp_rst = {"5237417651", "9591449441","9591449465"};
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),3);
+  categoryname = {"bnk"};
+  act_rst = m.GetAllLocationsFromCategory(categoryname);
+  exp_rst = {"-1, -1"};
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),1);
+  categoryname = {""};
+  act_rst = m.GetAllLocationsFromCategory(categoryname);
+  exp_rst = {"-1, -1"};
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),1);
+  categoryname = {"BANK"};
+  act_rst = m.GetAllLocationsFromCategory(categoryname);
+  exp_rst = {"5237417651", "9591449441","9591449465"};
+  EXPECT_THAT(act_rst,::testing::UnorderedElementsAreArray(exp_rst));
+  EXPECT_EQ(act_rst.size(),3);
 }
