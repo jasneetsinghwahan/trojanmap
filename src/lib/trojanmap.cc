@@ -286,6 +286,7 @@ std::vector<std::string> TrojanMap::GetAllLocationsFromCategory(
  * @param  {std::regex} location name      : the regular expression of location
  * names
  * @return {std::vector<std::string>}     : ids
+ * sources for generating and manually checking the regex: https://regexr.com/
  */
 std::vector<std::string> TrojanMap::GetLocationRegex(std::regex location) {
   std::vector<std::string> res;
@@ -361,6 +362,15 @@ double TrojanMap::CalculatePathLength(const std::vector<std::string> &path) {
 std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::string location1_name, std::string location2_name) {
   std::vector<std::string> path;
+  /* We look at all the neighbours of the current node and select the next node to be visited that has the min. distance */
+  
+  /* We mark a node as visited */
+
+  /* At the new node, we update the distance of all unvisited node */
+
+  /* Use priority queue instead of a queue (Dijkstra is almost BFS where we change the queue to priority_queue 
+   * but we have to update the priority queue with the nodes we are just visiting)
+  */
   return path;
 }
 
