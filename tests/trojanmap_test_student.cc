@@ -193,3 +193,10 @@ TEST(TrojanMapTest, CalculateShortestPath_Dijkstracopied) {
   std::cout << "no. of nodes visited in actual: "  << path.size() << std::endl;
   std::cout << "GT path length: " << m.CalculatePathLength(gt) << "miles" << std::endl;
 }
+
+TEST(TrojanMapTest, CalculateShortestPath_bellmanfordcopied) {
+  TrojanMap m;
+  auto path = m.CalculateShortestPath_Dijkstra("Antioch Temple Baptist Church", "Divine Providence Convent");
+  std::vector<std::string> gt = {"358850024", "122674584", "6816193741", "122674587", "6816193745", "277328088", "277328089", "277328090", "122674590", "1843466234", "4015377693", "6816180170", "6380132756", "6816180168", "1922565218", "2514542031", "4015377692", "6816193690", "123408740", "6816193692", "4015442011", "358850041"};
+  EXPECT_EQ(path, gt);
+}

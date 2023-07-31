@@ -102,6 +102,9 @@ class TrojanMap {
   // on the shortest path.
   std::vector<std::string> CalculateShortestPath_Dijkstra(
       std::string location1_name, std::string location2_name);
+
+  std::map<std::string, std::set<std::string>> GetPredecessors();
+
   std::vector<std::string> CalculateShortestPath_Bellman_Ford(
       std::string location1_name, std::string location2_name);
 

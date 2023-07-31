@@ -393,6 +393,7 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::vector<std::string> neighbors = data[nodebeingvisited].neighbors;
     for(int i = 0; i < neighbors.size(); ++i){
       double dist = CalculateDistance(nodebeingvisited, neighbors[i]);
+      // nodes that are visited shall not meet this if condition, it is akin to 'visited'
       if(d[neighbors[i]] > d[nodebeingvisited] + dist){
         d[neighbors[i]] = d[nodebeingvisited] + dist;
         path[neighbors[i]] = path[nodebeingvisited];
@@ -402,6 +403,16 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     }
   }
   return path[destid];
+}
+
+std::map<std::string, std::set<std::string>> TrojanMap::GetPredecessors() {
+  std::map<std::string, std::set<std::string>> pre;
+  for (auto i = data.begin(); i != data.end(); i++) {
+    for (auto j = i->second.neighbors.begin(); j != i->second.neighbors.end(); j++) {
+        pre[*j].insert(i->first);
+    }
+  }
+  return pre;
 }
 
 /**
@@ -415,8 +426,54 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
  */
 std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
     std::string location1_name, std::string location2_name) {
-  std::vector<std::string> path;
-  return path;
+  std::map<std::pair<int, std::string>, double> distance;
+  std::string srcid, destid;
+  std::unordered_map<std::string, std::vector<std::string>> path;
+  ///* get the ids from the names */
+  auto data_itr = data.begin();  
+  for (; data_itr != data.end(); ++data_itr){
+    std::string currname = data_itr->second.name;
+    if(!currname.empty()){
+      if(currname == location1_name) {
+        srcid = data_itr->first;
+      }
+      else if (currname == location2_name){
+        destid = data_itr->first;
+      }
+    }
+  }
+  auto pre = GetPredecessors();
+
+  for (auto i = 0; i != data.size() - 1; ++i){
+    for (auto v = data.begin(); v != data.end(); ++v){
+      // base case
+      if (i == 0){
+        distance[std::make_pair(0,v->first)] = (v->first == srcid) ? 0 : DBL_MAX;
+        path[v->first].push_back(srcid);
+        continue;
+      }
+      // non-base case
+      distance[std::make_pair(i,v->first)] = DBL_MAX;
+      std::map<std::string, double> updateid;
+      updateid[v->first] = distance[std::make_pair(i - 1,v->first)];
+      for (auto u : pre[v->first]) {
+        updateid[u] = distance[std::make_pair(i - 1,u)] + CalculateDistance(u,v->first);
+        std::vector<double> compareList = {distance[std::make_pair(i,v->first)], distance[std::make_pair(i - 1,v->first)],
+                                         distance[std::make_pair(i - 1,u)] + CalculateDistance(u,v->first)};
+        distance[std::make_pair(i,v->first)] = *std::min_element(compareList.begin(), compareList.end());
+      }
+      auto updateid_itr = updateid.begin();
+      std::string updateid_str;
+      for(;updateid_itr!=updateid.end(); ++updateid_itr){
+        if(updateid_itr->second == distance[std::make_pair(i,v->first)]){
+          updateid_str = updateid_itr->first; 
+          break;
+        }
+      }
+      path[v->first].push_back(updateid_str);
+    }
+  }
+  return path[destid];
 }
 
 /**
