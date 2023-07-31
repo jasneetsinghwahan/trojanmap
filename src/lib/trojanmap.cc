@@ -292,13 +292,7 @@ std::vector<std::string> TrojanMap::GetLocationRegex(std::regex location) {
   std::vector<std::string> res;
   try {
     auto itr = data.begin();
-    int i = 0;
-    bool match = false;
     for (; itr != data.end(); ++itr){
-      i++;
-        if(itr->first == "9446678097"){
-          match = true;
-        }
         if(std::regex_search(itr->first, location))
           res.push_back(itr->first);
     }
@@ -358,20 +352,56 @@ double TrojanMap::CalculatePathLength(const std::vector<std::string> &path) {
  * @param  {std::string} location1_name     : start
  * @param  {std::string} location2_name     : goal
  * @return {std::vector<std::string>}       : path
+ * Sources: I was stuck on whether do I need to first create a 2D graph of all 18k+ nodes, 
+ *          i initially decided to do so, but then next problem was how to store this graph in vector of vector
+ *          particularly, on should I convert the IDs (that needn't be within 0~183xx) to this range and then convert
+ *          At this point I looked at the trojanmap.cc of this github and found that there is no need to make a graph
+ *          and the algo. can be implemented by making the graph on the fly
+ *          https://github.com/ee538/final-project-Eric-Zheng29 
+ *          Furthermore, i looked at the code to figure out how to draw the path
+ *          https://github.com/dlwsdqdws/Trojan-Map/blob/master/src/lib/trojanmap.cc
  */
 std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::string location1_name, std::string location2_name) {
-  std::vector<std::string> path;
-  /* We look at all the neighbours of the current node and select the next node to be visited that has the min. distance */
-  
-  /* We mark a node as visited */
+  std::map<std::string, double> d;
+  std::string srcid, destid;
+  std::unordered_map<std::string, std::vector<std::string>> path;
+  ///* get the ids from the names */
+  auto data_itr = data.begin();  
+  for (; data_itr != data.end(); ++data_itr){
+    std::string currname = data_itr->second.name;
+    d[data_itr->first] = DBL_MAX;
+    if(!currname.empty()){
+      if(currname == location1_name) {
+        srcid = data_itr->first;
+      }
+      else if (currname == location2_name){
+        destid = data_itr->first;
+      }
+    }
+  }
+  d[srcid] = 0;
+  path[srcid].push_back(srcid);
+  std::priority_queue<std::pair<double, std::string>, std::vector<std::pair<double, std::string>>, std::greater<std::pair<double, std::string>>> pq;
 
-  /* At the new node, we update the distance of all unvisited node */
-
-  /* Use priority queue instead of a queue (Dijkstra is almost BFS where we change the queue to priority_queue 
-   * but we have to update the priority queue with the nodes we are just visiting)
-  */
-  return path;
+  pq.push(std::make_pair(0,srcid));
+  while(!pq.empty()){
+    auto t = pq.top();
+    pq.pop();
+    auto nodebeingvisited = t.second;
+    if(nodebeingvisited == destid) break;
+    std::vector<std::string> neighbors = data[nodebeingvisited].neighbors;
+    for(int i = 0; i < neighbors.size(); ++i){
+      double dist = CalculateDistance(nodebeingvisited, neighbors[i]);
+      if(d[neighbors[i]] > d[nodebeingvisited] + dist){
+        d[neighbors[i]] = d[nodebeingvisited] + dist;
+        path[neighbors[i]] = path[nodebeingvisited];
+        path[neighbors[i]].push_back(neighbors[i]);
+        pq.push({d[neighbors[i]], neighbors[i]});
+      }
+    }
+  }
+  return path[destid];
 }
 
 /**

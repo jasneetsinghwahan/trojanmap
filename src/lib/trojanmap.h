@@ -18,6 +18,8 @@
 #include <unordered_set>
 #include <set>
 #include <vector>
+#include <regex>
+#include <float.h>
 
 // A Node is the location of one point in the map.
 class Node {
