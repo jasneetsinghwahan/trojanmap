@@ -162,6 +162,9 @@ class TrojanMap {
   // Returns the result of each query in a vector.
   std::vector<bool> Queries(const std::vector<std::pair<double, std::vector<std::string>>> &q);
 
+  std::unordered_map<std::string,int> idxidopint;
+  std::unordered_map<int,std::string> idxintopstr;
+
   //----------------------------------------------------- User-defined functions
   int CalculateEditDistanceutil(const std::string &a, const std::string &b, int i, int j, std::vector<std::vector<int>> t);
 };

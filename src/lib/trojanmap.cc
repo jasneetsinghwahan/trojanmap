@@ -415,6 +415,25 @@ std::map<std::string, std::set<std::string>> TrojanMap::GetPredecessors() {
   return pre;
 }
 
+void pathVec(std::vector<int> &path, std::vector<int> &parent, int currNode)
+{
+  if (parent[currNode] == -1)
+  {
+    return;
+  }
+  path.push_back(parent[currNode]);
+  pathVec(path, parent, parent[currNode]);
+}
+//void pathVec(std::vector<std::string> &path, std::map<std::string, std::string> &parent, std::string currNode)
+//{
+//  if (parent[currNode] == "")
+//  {
+//    return;
+//  }
+//  path.push_back(parent[currNode]);
+//  pathVec(path, parent, parent[currNode]);
+//}
+
 /**
  * CalculateShortestPath_Bellman_Ford: Given 2 locations, return the shortest
  * path which is a list of id. Hint: Do the early termination when there is no
@@ -426,9 +445,11 @@ std::map<std::string, std::set<std::string>> TrojanMap::GetPredecessors() {
  */
 std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
     std::string location1_name, std::string location2_name) {
-  std::map<std::pair<int, std::string>, double> distance;
+  std::vector<double> distance(data.size(), DBL_MAX);
+  std::vector<double> distance_onepast(data.size(), DBL_MAX);
   std::string srcid, destid;
-  std::unordered_map<std::string, std::vector<std::string>> path;
+  std::vector<int> parent(data.size(),-1);
+  std::vector<int> path;
   ///* get the ids from the names */
   auto data_itr = data.begin();  
   for (; data_itr != data.end(); ++data_itr){
@@ -442,38 +463,39 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
       }
     }
   }
-  auto pre = GetPredecessors();
 
-  for (auto i = 0; i != data.size() - 1; ++i){
-    for (auto v = data.begin(); v != data.end(); ++v){
-      // base case
-      if (i == 0){
-        distance[std::make_pair(0,v->first)] = (v->first == srcid) ? 0 : DBL_MAX;
-        path[v->first].push_back(srcid);
-        continue;
+  data_itr = data.begin();
+  for (int i = 0; i < data.size(); i++){
+    idxidopint[data_itr->first] = i;
+    idxintopstr[i] = data_itr->first;
+    data_itr++;
+  }  
+
+  auto pre = GetPredecessors();
+  distance[idxidopint[srcid]] = 0;
+  for (auto i = 0; i < data.size() - 1; ++i){
+    for (auto v = 0; v < data.size(); ++v){
+      for (auto u : pre[idxintopstr[v]]) {
+        if(distance[v] > distance[idxidopint[u]] + CalculateDistance(idxintopstr[v], u)){
+          distance[v] = distance[idxidopint[u]] + CalculateDistance(idxintopstr[v], u);
+          parent[v] = idxidopint[u];
+        } 
       }
-      // non-base case
-      distance[std::make_pair(i,v->first)] = DBL_MAX;
-      std::map<std::string, double> updateid;
-      updateid[v->first] = distance[std::make_pair(i - 1,v->first)];
-      for (auto u : pre[v->first]) {
-        updateid[u] = distance[std::make_pair(i - 1,u)] + CalculateDistance(u,v->first);
-        std::vector<double> compareList = {distance[std::make_pair(i,v->first)], distance[std::make_pair(i - 1,v->first)],
-                                         distance[std::make_pair(i - 1,u)] + CalculateDistance(u,v->first)};
-        distance[std::make_pair(i,v->first)] = *std::min_element(compareList.begin(), compareList.end());
-      }
-      auto updateid_itr = updateid.begin();
-      std::string updateid_str;
-      for(;updateid_itr!=updateid.end(); ++updateid_itr){
-        if(updateid_itr->second == distance[std::make_pair(i,v->first)]){
-          updateid_str = updateid_itr->first; 
-          break;
-        }
-      }
-      path[v->first].push_back(updateid_str);
     }
+    if (i > 0 && distance_onepast == distance){
+      break;
+    }
+    distance_onepast = distance;
   }
-  return path[destid];
+  path.push_back(idxidopint[destid]);
+  pathVec(path, parent, idxidopint[destid]);
+  // reverse and replace int ids with string ids
+  std::vector<std::string> fwdpath;
+  for (int i = path.size() - 1; i >= 0; i--)
+  {
+    fwdpath.push_back(idxintopstr[path[i]]);
+  }
+  return fwdpath;
 }
 
 /**
