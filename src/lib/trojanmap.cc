@@ -625,7 +625,14 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(
  * @return {bool}                      : in square or not
  */
 bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
-  return true;
+  Node pt = data[id];
+  //bool match = false;
+  //if (id == "6808089754" || id == "123161946")
+  //  match = true;
+  //match = false;
+  if (pt.lon >= square[0] && pt.lon <= square[1] && pt.lat <= square[2] && pt.lat >= square[3])
+    return true;
+  return false;
 }
 
 
@@ -641,6 +648,12 @@ bool TrojanMap::inSquare(std::string id, std::vector<double> &square) {
 std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
   // include all the nodes in subgraph
   std::vector<std::string> subgraph;
+  std::unordered_map<std::string, Node>::iterator db_itr = data.begin();
+  for (; db_itr != data.end(); ++db_itr){     // parse all the vertices
+    std::string dbg_string = db_itr->first;
+    if(inSquare(db_itr->first, square))
+      subgraph.push_back(db_itr->first);
+  }
   return subgraph;
 }
 
@@ -652,8 +665,54 @@ std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
  * square
  * @param {std::vector<double>} square: four vertexes of the square area
  * @return {bool}: whether there is a cycle or not
+ * sources: https://stackoverflow.com/questions/31532887/detecting-cycle-in-an-undirected-graph-using-iterative-dfs
  */
 bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<double> &square) {
+
+  // preferred way 
+  //std::unordered_map<std::string, bool> visited;
+  //std::unordered_map<std::string, bool> on_stack;
+  //std::stack<std::string> st;
+  // make algo. work first way
+  std::vector<bool> visited (subgraph.size(), false);
+  std::stack<std::pair<int, int>> st;
+
+  std::unordered_map<std::string, Node>::iterator db_itr = data.begin();
+  for (int i = 0; i < data.size(); i++){
+    idxidopint[db_itr->first] = i;
+    idxintopstr[i] = db_itr->first;
+    db_itr++;
+  }  
+
+  for (int w = 0; w < subgraph.size(); w++) {
+
+    if (visited[w])
+      continue;
+    st.push(std::make_pair(w, -1));
+    visited[w] = true;
+
+    while (!st.empty()) {
+      int s = st.top().first;
+      int f = st.top().second;
+      st.pop();
+
+      std::string nodeundercon = subgraph[s];
+      for (const auto &v : data[nodeundercon].neighbors) {
+        auto it_find = std::find(subgraph.begin(), subgraph.end(),v);
+        // result wouldn't be found always, some nodes shall be outside the square
+        if (it_find == subgraph.end())
+          continue;
+        auto index = std::distance(subgraph.begin(), it_find);
+        if (!visited[index]) {
+          st.push(std::make_pair(index,s));
+          visited[index] = true;
+        } else if (index != f) {
+          return true;
+        }
+      }
+    }
+  }
+
   return false;
 }
 

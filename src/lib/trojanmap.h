@@ -21,6 +21,14 @@
 #include <regex>
 #include <float.h>
 
+// to debug in vscode debug console and find the value at specific indexes
+// source: https://stackoverflow.com/questions/40633787/cannot-evaluate-function-may-be-in-lined-error-in-gdb-for-stl-template-cont?noredirect=1&lq=1
+//template class std::unordered_map<std::string, Node>;
+template class std::unordered_map<std::string, int>;
+template class std::vector<std::string>;
+template class std::unordered_map<int, std::string>;
+
+
 // A Node is the location of one point in the map.
 class Node {
  public:
