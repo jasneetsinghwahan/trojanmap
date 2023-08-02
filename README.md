@@ -5,7 +5,7 @@ O(n) as the function iterates over all the elements in the hash map
 
 
 
-## Item 6: Autocomplete The Location Name (Phase 1)
+## Item 6: Shortest Path (Phase 2)
 
  Point A to Point B                                                             | Dijkstra  | Bellman Ford| Bellman Ford optimized|
 | --------------------                                                          | ----------|-------------|-----------------------|
@@ -24,3 +24,21 @@ O(n) as the function iterates over all the elements in the hash map
 | Pilgrim Congregational Church to Second Baptist Church                        | 215 ms    | 10613 ms    |
 | United Church of Christ Scientist to American Hungarian Baptist Church        | 263ms     | 10658 ms    |
 | Grace Lutheran Church to Korean Presbyterian Church (나성한인연합장로교회)         | 105ms     | 9193 ms     |
+
+## Item 7: Cycle Detection (Phase 2)
+```shell
+Input: square = {-118.299, -118.264, 34.032, 34.011}
+Output: true
+
+Input: square = {-118.290, -118.289, 34.030, 34.020}
+Output: false
+
+Input: square = {-118.284007, -118.2819, 34.0366, 34.035}
+Output: true
+
+Input: square = {-118.290, -118.288, 34.030, 34.0285}
+Output: false
+
+Input: square = {-118.290, -118.288, 34.030, 34.0255}
+Output: true
+```shell
