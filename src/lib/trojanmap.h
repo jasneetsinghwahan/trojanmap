@@ -176,6 +176,8 @@ class TrojanMap {
   //----------------------------------------------------- User-defined functions
   int CalculateEditDistanceutil(const std::string &a, const std::string &b, int i, int j, std::vector<std::vector<int>> t);
   void constructdag(std::unordered_map<std::string, std::vector<std::string>> &dag, const std::vector<std::vector<std::string>> &dependencies);
+  void TSP_aux5(int start, std::vector<std::string> &location_ids, int cur_node, double cur_cost, std::vector<int> &cur_path, int &rstidx,
+                std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> &allrecords);
 };
 
 #endif

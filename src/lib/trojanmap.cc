@@ -514,7 +514,78 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravelingTrojan_Brute_force(
                                     std::vector<std::string> location_ids) {
   std::pair<double, std::vector<std::vector<std::string>>> records;
+  std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> allrecords;
+
+  std::vector<std::string>::iterator data_itr = location_ids.begin();
+  for (int i = 0; i < location_ids.size(); i++){
+    idxidopint[*data_itr] = i;
+    idxintopstr[i] = *data_itr;
+    data_itr++;
+  } 
+
+  int start = idxidopint[location_ids[0]];    // '0' is agnostic, can be any other number
+  std::vector<int> cur_path = {start};
+  std::vector<int> min_path;
+  records.first = DBL_MAX;
+  int rstidx = 0;
+  TSP_aux5(start, location_ids, start, 0.0, cur_path, rstidx, allrecords); 
+  // need to sort the results in descending order of path length
+  bool first = true;
+  int pos = int(allrecords.size())-1;
+  while(allrecords.size()){
+    if (first){
+      auto& minele = allrecords.top();
+      records.first = minele.first;
+      records.second.insert(records.second.begin(),minele.second);
+      first = false;
+      allrecords.pop();
+      continue;
+    }
+    auto& ele = allrecords.top();
+    records.second.insert(records.second.begin(),ele.second);
+    allrecords.pop();
+  }
   return records;
+}
+
+
+void TrojanMap::TSP_aux5(int start, 
+                          std::vector<std::string> &location_ids,
+                          int cur_node, double cur_cost,
+                          std::vector<int> &cur_path, 
+                          int &rstidx,
+                          std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> &allrecords){
+                          //std::unordered_map<double, std::vector<std::string>> &allrecords) {
+  // If we are at a leaf, update min_cost and min_path.
+  if (cur_path.size() == location_ids.size()) {
+    double final_cost = cur_cost + CalculateDistance(idxintopstr[cur_node], idxintopstr[start]);
+    //if (final_cost < records.first) {
+      //records.first = final_cost;
+    //}
+    std::vector<std::string> cur_pathstr(cur_path.size());
+    // convert the path of ints to path of strings
+    for (int i = 0; i < cur_path.size(); i++){
+      cur_pathstr[i] = idxintopstr[cur_path[i]];
+    }
+    cur_pathstr.push_back(idxintopstr[cur_path[start]]);
+    //allrecords.insert(std::make_pair<double, std::vector<std::string>>(final_cost, cur_pathstr));
+    allrecords.push({final_cost, cur_pathstr});
+    return;
+  }
+  // Early backtracking
+  //if (cur_cost > min_cost) {
+  //  return;
+  //}
+  // Else, evaluate all children.
+  for (int i = 0; i < location_ids.size(); i++) {
+    if (std::find(cur_path.begin(), cur_path.end(), i) == cur_path.end()) {
+      cur_path.push_back(i);
+
+      TSP_aux5(start, location_ids,i, cur_cost + CalculateDistance(idxintopstr[cur_node], idxintopstr[i]), cur_path, rstidx, allrecords);
+
+      cur_path.pop_back();
+    }
+  }
 }
 
 // Please use backtracking to implement this function
