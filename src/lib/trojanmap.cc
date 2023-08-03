@@ -602,6 +602,22 @@ std::vector<std::vector<std::string>> TrojanMap::ReadDependenciesFromCSVFile(
 }
 
 /**
+ * constructs directed acyclic graph
+ * @param  {std::vector<std::vector<std::string>>} dependencies                                 : prerequisites
+ * @param  {std::unordered_map<std::string, std::vector<std::string>>} &dag                     : results
+*/
+void TrojanMap::constructdag(std::unordered_map<std::string, std::vector<std::string>> &dag, const std::vector<std::vector<std::string>> &dependencies){
+  std::vector<std::string> neighbor;
+  for(int i = 0; i < dependencies.size(); ++i){
+    const std::string &st = dependencies[i][0];
+    const std::string &ed = dependencies[i][1];
+    dag[st].push_back(ed);
+  }
+  return;
+} 
+
+
+/**
  * DeliveringTrojan: Given a vector of location names, it should return a
  * sorting of nodes that satisfies the given dependencies. If there is no way to
  * do it, return a empty vector.
@@ -614,6 +630,52 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(
     std::vector<std::string> &locations,
     std::vector<std::vector<std::string>> &dependencies) {
   std::vector<std::string> result;
+  std::stack<std::pair<bool,int>> dfs;
+  std::stack<int> postOrder;
+  std::unordered_map<std::string, std::vector<std::string>> dag;
+
+  constructdag(dag, dependencies);
+  std::vector<bool> visited(locations.size(), false);
+
+  std::vector<std::string>::iterator db_itr = locations.begin();
+  for (int i = 0; i < locations.size(); i++){
+    idxidopint[*db_itr] = i;
+    idxintopstr[i] = *db_itr;
+    db_itr++;
+  }  
+
+
+  for(int i=0 ; i < locations.size() ; i++){
+    if(!visited[i]){
+        dfs.push(std::make_pair(false,i));
+    }   
+    while(!dfs.empty()){
+      std::pair<bool,int> node=dfs.top();
+      dfs.pop();
+      if (node.first) {
+          postOrder.push(node.second);
+          continue;
+      }
+      if (visited[node.second]) {
+          continue;
+      }
+      visited[node.second]=true;
+      dfs.push(std::make_pair(true, node.second));
+      const auto& newVec=dag[idxintopstr[node.second]]; //vector of neighboors
+      for(const auto son: newVec){
+          if(!visited[idxidopint[son]]){
+              dfs.push(std::make_pair(false, idxidopint[son]));
+          }
+      }
+    }
+  }
+
+  // populate the results only for the nodes mentioned in the locations list
+  while(!postOrder.empty()) {
+    //result.insert(result.begin(),idxintopstr[postOrder.top()]);
+    result.push_back(idxintopstr[postOrder.top()]);
+    postOrder.pop();
+  }
   return result;     
 }
 
