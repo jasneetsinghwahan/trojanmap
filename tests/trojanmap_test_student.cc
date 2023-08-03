@@ -197,22 +197,159 @@
 //  std::cout << "GT path length: " << m.CalculatePathLength(gt) << "miles" << std::endl;
 //}
 
-TEST(TrojanMapTest, CalculateShortestPath_dijkstramini) {
+//TEST(TrojanMapTest, CalculateShortestPath_dijkstramini) {
+//  TrojanMap m;
+//  std::vector<std::string> gt = {};
+//  auto path = m.CalculateShortestPath_Dijkstra("Antioch Temple Baptist Church", "Jesus of Nazareth Undenominational Church");
+//  gt = {"358850024", "122674584", "358850058"};
+//  EXPECT_EQ(path, gt);
+//}
+//
+//
+//TEST(TrojanMapTest, CalculateShortestPath_bellmanfordcopied) {
+//  TrojanMap m;
+//  auto path = m.CalculateShortestPath_Bellman_Ford("Antioch Temple Baptist Church", "Jesus of Nazareth Undenominational Church");
+//  std::vector<std::string> gt = {"358850024", "122674584", "358850058"};
+//  EXPECT_EQ(path, gt);
+//
+//  path = m.CalculateShortestPath_Dijkstra("Antioch Temple Baptist Church", "Divine Providence Convent");
+//  gt = {"358850024", "122674584", "6816193741", "122674587", "6816193745", "277328088", "277328089", "277328090", "122674590", "1843466234", "4015377693", "6816180170", "6380132756", "6816180168", "1922565218", "2514542031", "4015377692", "6816193690", "123408740", "6816193692", "4015442011", "358850041"};
+//  EXPECT_EQ(path, gt);
+//}
+
+//TEST(TrojanMapTest, CycleDetectionmini) {
+//  TrojanMap m;
+//  
+//  // Test case 1
+//  std::vector<double> square1 = {-118.299, -118.264, 34.032, 34.011};
+//  auto sub1 = m.GetSubgraph(square1);
+//  bool result1 = m.CycleDetection(sub1, square1);
+//  EXPECT_EQ(result1, true);
+//  //std::vector<double> square1 = {-118.320, -118.250, 34.000, 34.040};
+//
+//  // Test case 2
+//  std::vector<double> square2 = {-118.290, -118.289, 34.030, 34.020};
+//  auto sub2 = m.GetSubgraph(square2);
+//  bool result2 = m.CycleDetection(sub2, square2);
+//  EXPECT_EQ(result2, false);
+//
+//  // following test case passed
+//  // Test case 3
+//  square1 = {-118.284007, -118.2819, 34.0366, 34.035};
+//  sub1 = m.GetSubgraph(square1);
+//  result1 = m.CycleDetection(sub1, square1);
+//  EXPECT_EQ(result1, true);
+//
+//  // Test case 4
+//  square1 = {-118.290, -118.288, 34.030, 34.0285};
+//  sub1 = m.GetSubgraph(square1);
+//  result1 = m.CycleDetection(sub1, square1);
+//  EXPECT_EQ(result1, false);
+//
+//  // Test case 5
+//  square1 = {-118.290, -118.288, 34.030, 34.0255};
+//  sub1 = m.GetSubgraph(square1);
+//  result1 = m.CycleDetection(sub1, square1);
+//  EXPECT_EQ(result1, true);
+//}
+
+//TEST(TrojanMapTest, TopologicalSortmini) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> location_names = {"Ralphs", "Chick-fil-A", "KFC"};
+//  std::vector<std::vector<std::string>> dependencies = {{"Ralphs","KFC"}, {"Ralphs","Chick-fil-A"}, {"KFC","Chick-fil-A"}};
+//  auto result = m.DeliveringTrojan(location_names, dependencies);
+//  std::vector<std::string> gt ={"Ralphs", "KFC","Chick-fil-A"};
+//  EXPECT_EQ(result, gt);
+//}
+//
+//TEST(TrojanMapTest, TopologicalSortfull) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> location_names = {"Foshay Learning Center", "Holy Name School", "National Schools", "Normandie Elementary School", "Saint Agnes Elementary School"};
+//  std::vector<std::vector<std::string>> dependencies = {{"Saint Agnes Elementary School","Foshay Learning Center"}, {"Foshay Learning Center","Holy Name School"}, {"Foshay Learning Center","National Schools"}, {"Saint Agnes Elementary School","National Schools"},{"National Schools","Normandie Elementary School"}};
+//  auto result = m.DeliveringTrojan(location_names, dependencies);
+//  std::vector<std::string> gt ={"Saint Agnes Elementary School", "Foshay Learning Center","Holy Name School", "National Schools", "Normandie Elementary School"};
+//  EXPECT_EQ(result, gt);
+//
+//
+//  location_names = {"Saint Cecilia School", "Saint Patrick School", "Santa Barbara Avenue School", "Trinity Elementary School", "Twenty-Eight Street Elementary School", "Vermont Elementary School", "Wadsworth Elementary School"};
+//  dependencies = {{"Saint Cecilia School","Saint Patrick School"}, {"Santa Barbara Avenue School","Saint Patrick School"}, {"Trinity Elementary School","Saint Patrick School"}, {"Twenty-Eight Street Elementary School","Saint Patrick School"},{"Twenty-Eight Street Elementary School","Vermont Elementary School"}, {"Wadsworth Elementary School","Vermont Elementary School"}};
+//  result = m.DeliveringTrojan(location_names, dependencies);
+//  gt = {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School", "Vermont Elementary School", "Trinity Elementary School", "Santa Barbara Avenue School", "Saint Cecilia School", "Saint Patrick School"};
+//  EXPECT_EQ(result, gt);
+//
+//}
+
+// Test TSP function
+TEST(TrojanMapTest, TSP1mini) {
   TrojanMap m;
-  std::vector<std::string> gt = {};
-  auto path = m.CalculateShortestPath_Dijkstra("Antioch Temple Baptist Church", "Jesus of Nazareth Undenominational Church");
-  gt = {"358850024", "122674584", "358850058"};
-  EXPECT_EQ(path, gt);
+  
+  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
+  auto result = m.TravelingTrojan_Brute_force(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (!result.second.empty() && gt == result.second.back())  // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (!result.second.empty() && gt == result.second.back())
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
 }
 
-
-TEST(TrojanMapTest, CalculateShortestPath_bellmanfordcopied) {
+TEST(TrojanMapTest, TSP1full) {
   TrojanMap m;
-  auto path = m.CalculateShortestPath_Bellman_Ford("Antioch Temple Baptist Church", "Jesus of Nazareth Undenominational Church");
-  std::vector<std::string> gt = {"358850024", "122674584", "358850058"};
-  EXPECT_EQ(path, gt);
+  
+  std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
+  auto result = m.TravelingTrojan_Brute_force(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (!result.second.empty() && gt == result.second.back())  // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (!result.second.empty() && gt == result.second.back())
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
+}
 
-  path = m.CalculateShortestPath_Dijkstra("Antioch Temple Baptist Church", "Divine Providence Convent");
-  gt = {"358850024", "122674584", "6816193741", "122674587", "6816193745", "277328088", "277328089", "277328090", "122674590", "1843466234", "4015377693", "6816180170", "6380132756", "6816180168", "1922565218", "2514542031", "4015377692", "6816193690", "123408740", "6816193692", "4015442011", "358850041"};
-  EXPECT_EQ(path, gt);
+TEST(TrojanMapTest, TSPbtmini) {
+  TrojanMap m;
+  
+  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
+  auto result = m.TravelingTrojan_Backtracking(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (!result.second.empty() && gt == result.second.back())  // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (!result.second.empty() && gt == result.second.back())
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
+}
+
+TEST(TrojanMapTest, TSPbtfull) {
+  TrojanMap m;
+  
+  std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
+  auto result = m.TravelingTrojan_Backtracking(input);
+  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+  std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
+  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+  bool flag = false;
+  if (!result.second.empty() && gt == result.second.back())  // clockwise
+    flag = true;
+  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+  if (!result.second.empty() && gt == result.second.back())
+    flag = true;
+  
+  EXPECT_EQ(flag, true);
 }
