@@ -107,8 +107,12 @@ int TrojanMap::CalculateEditDistance(std::string a, std::string b) {
     for (int j = 1; j < blen+1; j++){
       if(a[i-1] == b[j-1])
         t[i][j] = 0 + t[i-1][j-1];
-      else
+      else {
+        // i,j-1                - for insertion
+        // i-1,j                - for deletion
+        // i-1,j-1              - for replacement
         t[i][j] = 1 + std::min(t[i-1][j-1], std::min(t[i-1][j], t[i][j-1]));
+      }
     }
   }
   return t[alen][blen];
@@ -352,21 +356,14 @@ double TrojanMap::CalculatePathLength(const std::vector<std::string> &path) {
  * @param  {std::string} location1_name     : start
  * @param  {std::string} location2_name     : goal
  * @return {std::vector<std::string>}       : path
- * Sources: I was stuck on whether do I need to first create a 2D graph of all 18k+ nodes, 
- *          i initially decided to do so, but then next problem was how to store this graph in vector of vector
- *          particularly, on should I convert the IDs (that needn't be within 0~183xx) to this range and then convert
- *          At this point I looked at the trojanmap.cc of this github and found that there is no need to make a graph
- *          and the algo. can be implemented by making the graph on the fly
- *          https://github.com/ee538/final-project-Eric-Zheng29 
- *          Furthermore, i looked at the code to figure out how to draw the path
- *          https://github.com/dlwsdqdws/Trojan-Map/blob/master/src/lib/trojanmap.cc
+ * 
  */
 std::vector<std::string> TrojanMap::CalculateShortestPath_Dijkstra(
     std::string location1_name, std::string location2_name) {
   std::map<std::string, double> d;
   std::string srcid, destid;
   std::unordered_map<std::string, std::vector<std::string>> path;
-  ///* get the ids from the names */
+  // get the ids from the names 
   auto data_itr = data.begin();  
   for (; data_itr != data.end(); ++data_itr){
     std::string currname = data_itr->second.name;
@@ -464,6 +461,7 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
     }
   }
 
+  // string to ints and vice-versa for easier debugging and ability to work with vectors
   data_itr = data.begin();
   for (int i = 0; i < data.size(); i++){
     idxidopint[data_itr->first] = i;
@@ -474,7 +472,7 @@ std::vector<std::string> TrojanMap::CalculateShortestPath_Bellman_Ford(
   auto pre = GetPredecessors();
   distance[idxidopint[srcid]] = 0;
   for (auto i = 0; i < data.size() - 1; ++i){
-    for (auto v = 0; v < data.size(); ++v){
+    for (auto v = 0; v < data.size(); ++v){       // loop over all the neighbors of this node
       for (auto u : pre[idxintopstr[v]]) {
         if(distance[v] > distance[idxidopint[u]] + CalculateDistance(idxintopstr[v], u)){
           distance[v] = distance[idxidopint[u]] + CalculateDistance(idxintopstr[v], u);
@@ -818,13 +816,13 @@ std::vector<std::string> TrojanMap::DeliveringTrojan(
   constructdag(dag, dependencies);
   std::vector<bool> visited(locations.size(), false);
 
+  // mapping std::string ids to int and vice-versa
   std::vector<std::string>::iterator db_itr = locations.begin();
   for (int i = 0; i < locations.size(); i++){
     idxidopint[*db_itr] = i;
     idxintopstr[i] = *db_itr;
     db_itr++;
   }  
-
 
   for(int i=0 ; i < locations.size() ; i++){
     if(!visited[i]){
@@ -908,7 +906,7 @@ std::vector<std::string> TrojanMap::GetSubgraph(std::vector<double> &square) {
  * square
  * @param {std::vector<double>} square: four vertexes of the square area
  * @return {bool}: whether there is a cycle or not
- * sources: https://stackoverflow.com/questions/31532887/detecting-cycle-in-an-undirected-graph-using-iterative-dfs
+ * 
  */
 bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<double> &square) {
 
@@ -920,6 +918,7 @@ bool TrojanMap::CycleDetection(std::vector<std::string> &subgraph, std::vector<d
   std::vector<bool> visited (subgraph.size(), false);
   std::stack<std::pair<int, int>> st;
 
+  // mapping std::string ids to int and vice-versa
   std::unordered_map<std::string, Node>::iterator db_itr = data.begin();
   for (int i = 0; i < data.size(); i++){
     idxidopint[db_itr->first] = i;
