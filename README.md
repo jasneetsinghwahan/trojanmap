@@ -1,9 +1,44 @@
 # 1. Overview
+TrojanMap is class-project as part of EE538: Computing Principles for EE. This project requires students to apply graph theory concepts and implement various features using classic algorithms and data structures. Example of features are
++ edit distance to find the distance between two text strings, a common function employed in spelling correction, string matching etc..
++ finding shortest path between source and destination using dijkstra and bellman-ford (thereby allowing its implementation in graphs with -ve distances)
++ topological sort with applications like dependency resolution
++ classic travelling salesman that is implemented using various approaches like brute-force, bruceforce with backtracking and local search (2-opt)
+The project involves showcasing the results on a map using OpenCV integration
+
+## Data structure
+Each point on the map is represented by the class **Node** shown below and defined in [trojanmap.h](src/lib/trojanmap.h).
+
+```cpp
+// A Node is the location of one point in the map.
+class Node {
+ public:
+  Node(){};
+  Node(const Node &n) {
+    id = n.id;
+    lat = n.lat;
+    lon = n.lon;
+    name = n.name;
+    neighbors = n.neighbors;
+    attributes = n.attributes;
+  };
+  std::string id;    // A unique id assigned to each point.
+  double lat;        // Latitude
+  double lon;        // Longitude
+  std::string name;  // Name of the location. E.g. "Bank of America".
+  std::vector<std::string>
+      neighbors;  // List of the ids of all neighbor points.
+  std::unordered_set<std::string>
+      attributes;  // List of the attributes of the location.
+};
+```
+## common implementation details across all functions
 + The nodes are given in the form of std::string. Instead of working with std::string as nodes, thereby, restricting the use of std::vector as a container (for which index are numerals,) for later half of functions, I mapped string IDs to int IDs and vice-versa and worked with ints and indexed into unordered_map<std::string, Node> data structure
 
 + Furthermore, other than travelling salesman, almost in every other function iterative form is used/preferred over recursive form. Because, at first go, shortest path (dijkstra) was implemented using recursion and it was taking infinite time to get results, for instance, while parsing 18000+ points, the recursion wouldn't be able to parse 500+ points in about 5 minutes, whereas changing to iterative form immediately improved the timing. Please note that recursion was giving correct results as it was tested pass on smaller total number of data points (7) by using a micro-version of carefully selected data points in the given dataset  
 
-
+## Tools & Platforms
+Ubuntu OS, Visual Studio Code, Bazel, Google Tests, OpenCV, CMake 
 
 # 2. Detailed description of each function and its time complexity.
 ## Item 1: Autocomplete The Location Name (Phase 1)
@@ -49,6 +84,8 @@ Aborted (core dumped)
 | help               | Shell      |    4 ms    |   y   |
 | please             | Chase      |    4 ms    |   y   |
 | thanks             | Chase      |    3 ms    |   n   |
+
+<p align="center"><img src="media/findthelocation.gif" alt="find_the_location_demo" width="500" /></p>
 
 ## Item 3: Get All Categories
 + time complexity: O(n) where n are the number of elements in the database, please note that insertion in unordered_map is O(constant) complexity 
