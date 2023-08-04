@@ -97,7 +97,7 @@ Aborted (core dumped)
 
 ## Item 4: Get All Locations In A Category
 + time complexity: O(n) as we perform 2 separate instances of parsing the entire database, once to construct the categories list and second time to parse each location for matching attribute same as category 
-<p align="left"><img src="media/alllocations inacategory.gif" alt="all_locations_in_a_category_demo"/></p>
+<p align="left"><img src="media/alllocations_inacategory.gif" alt="all_locations_in_a_category_demo"/></p>
 
 ## Item 5: Get Locations Using A Regular Expression
 + method: we parse the entire database leading to time complexity of O(n) and for each element, we perform reg_ex search that has a complexity of O(n)
@@ -201,7 +201,6 @@ Output: true
 - references: https://github.com/williamfiset/Algorithms/blob/master/slides/graphtheory/graph_theory_algorithms.pdf
 
 ```shell
-
 Input: 
 location_names = {"Foshay Learning Center", "Holy Name School", "National Schools", "Normandie Elementary School", "Saint Agnes Elementary School"}
 dependencies = {{"Saint Agnes Elementary School","Foshay Learning Center"}, {"Foshay Learning Center","Holy Name School"}, {"Foshay Learning Center","National Schools"}, {"Saint Agnes Elementary School","National Schools"},{"National Schools","Normandie Elementary School"}}
@@ -212,7 +211,7 @@ location_names = {"Saint Cecilia School", "Saint Patrick School", "Santa Barbara
 dependencies = {{"Saint Cecilia School","Saint Patrick School"}, {"Santa Barbara Avenue School","Saint Patrick School"}, {"Trinity Elementary School","Saint Patrick School"}, {"Twenty-Eight Street Elementary School","Saint Patrick School"},{"Twenty-Eight Street Elementary School","Vermont Elementary School"}, {"Wadsworth Elementary School","Vermont Elementary School"}} 
 Output: {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School", "Vermont Elementary School", "Trinity Elementary School", "Santa Barbara Avenue School", "Saint Cecilia School", "Saint Patrick School"}
 ```
-<p align="left"><img src="media/topologicalsort.gif" alt="topologial_sort_demo"/></p>
+<p align="left"><img src="media/topological_sort.gif" alt="topologial_sort_demo"/></p>
 
 ## Item 9: Traveling Salesman (Phase 3)
 ### 2-opt
