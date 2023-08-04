@@ -7,15 +7,62 @@ Furthermore, other than travelling salesman, almost in every other function iter
 
 # 2. Detailed description of each function and its time complexity.
 ## Item 1: Autocomplete The Location Name (Phase 1)
-- What is the runtime of your algorithm? 
-O(n) as the function iterates over all the elements in the hash map 
-- (Optional) Can you do it faster than `O(n)`?
++ What is the runtime of your algorithm? 
+O(n) as the function iterates over all the elements in the unordered map
+
++ (Optional) Can you do it faster than `O(n)`?
+TBD
+
+| Query              | time spent |
+| -------------------|------------|
+| stAR               | 3 ms       |
+| holy name          | 6 ms       |
+| washington         | 8 ms       |
+
+Current limitations: when I enter "school" then following errors comes:
+```shell
+terminate called after throwing an instance of 'std::invalid_argument'
+  what():  stoi
+Aborted (core dumped)
+```
+## Item 2-1: GetPosition
++ time complexity: upto linear
++ method: iterate through the entire map and at each iteration compare the database name (if name exists) withe the input name
+
+| Query              | time spent |
+| -------------------|------------|
+| National Schools   | 2 ms       |
+| Arco               | 3 ms       |
+| Ramen KenJo        | 0 ms       |
+
+
+## Item 2-2: EditDistance
++ time complexity: O(mn) where m and n are the lengths of the two given strings
++ method:
+  + Initially recursive method was tried, but it was too slow, hence, tabulation method was chosen
+  + we always try to find min of three operations i.e. replacement or insertion or deletion 
+
+![editdistance_using_tabulation](https://github.com/ee538/sum23-trojanmap-jasneetsinghwahan/blob/main/report/editdistance_using_tabulation.jpg)
+
+| Query              | prompt     | time spent | reply |
+| -------------------|------------|------------|-------|
+| help               | Shell      |    4 ms    |   y   |
+| please             | Chase      |    4 ms    |   y   |
+| thanks             | Chase      |    3 ms    |   n   |
+
+## Item 3: Get All Categories
++ time complexity: O(n) where n are the number of elements in the database, please note that insertion in unordered_map is O(constant) complexity 
++ method:
+  + data structure: unordered set was used to store the categories, as unordered map is implemented in stl with a characteristics that it doesn't stores duplicates
+  + we always try to find min of three operations i.e. replacement or insertion or deletion 
+
+## Item 4: Get All Locations In A Category
 
 
 
 ## Item 6: Shortest Path (Phase 2)
 
- Point A to Point B                                                             | Dijkstra  | Bellman Ford| Bellman Ford optimized|
+| Point A to Point B                                                            | Dijkstra  | Bellman Ford| Bellman Ford optimized|
 | --------------------                                                          | ----------|-------------|-----------------------|
 | Antioch Temple Baptist Church to Jesus of Nazareth Undenominational Church    | 21ms      | 7839 ms     |-----------------------|
 | Antioch Temple Baptist Church to Divine Providence Convent                    | 25ms      | 8879 ms     |
@@ -77,7 +124,7 @@ dependencies = {{"Saint Cecilia School","Saint Patrick School"}, {"Santa Barbara
 Output: {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School", "Vermont Elementary School", "Trinity Elementary School", "Santa Barbara Avenue School", "Saint Cecilia School", "Saint Patrick School"}
 ```
 
-## Item 9: Travelling Salesman (Phase 3)
+## Item 9: Traveling Salesman (Phase 3)
 
 | Number of Places | Bruteforce | Bruceforce with backtracking |   2-opt    |
 | -----------------|------------|------------------------------|------------|
