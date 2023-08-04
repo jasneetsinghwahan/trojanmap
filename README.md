@@ -1,3 +1,11 @@
+# 1. Overview
+The nodes are given in the form of std::string. Instead of working with std::string as nodes, thereby, restricting the use of std::vector as a container (for which index are numerals,) for later half of functions, I mapped string IDs to int IDs and vice-versa and worked with ints and indexed into unordered_map<std::string, Node> data structure
+
+Furthermore, other than travelling salesman, almost in every other function iterative form is used/preferred over recursive form. Because, at first go, shortest path (dijkstra) was implemented using recursion and it was taking infinite time to get results, for instance, while parsing 18000+ points, the recursion wouldn't be able to parse 500+ points in about 5 minutes, whereas changing to iterative form immediately improved the timing. Please note that recursion was giving correct results as it was tested pass on smaller total number of data points (7) by using a micro-version of carefully selected data points in the given dataset  
+
+
+
+# 2. Detailed description of each function and its time complexity.
 ## Item 1: Autocomplete The Location Name (Phase 1)
 - What is the runtime of your algorithm? 
 O(n) as the function iterates over all the elements in the hash map 
@@ -71,5 +79,22 @@ Output: {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School",
 
 ## Item 9: Travelling Salesman (Phase 3)
 
+| Number of Places | Bruteforce | Bruceforce with backtracking |   2-opt    |
+| -----------------|------------|------------------------------|------------|
+|        5         |   0 ms     |             0 ms             |    0 ms    |
+|        6         |   1 ms     |             0 ms             |    1 ms    |
+|        7         |   21 ms    |             5 ms             |    0 ms    |
+|        8         |   788 ms   |            27 ms             |    2 ms    | 
+
+# 3. Time spent for each function.
+# 4. Discussion, conclusion, and lessons learned.
 
 
+## lessons learned
+- start with a small testing set, since its easier to debug, for instance, in the travelling salesman problem with 2-opt, the algorithm was going into infinite loop and the distance was getting negative, even though the implementation was borrowed from wikipedia, after beginning with a 4 locations, the bug was found out 
+
+## problems faced
+- while using vscode with gdb, many attempts were made to to see the contents inside the data structures like unordered_map and ordered_map. Though the run and debug window shows the inside contents, but restricts it to 500 entries, that was insufficient at one time, after trying out various ways as listed here: https://stackoverflow.com/questions/40633787/cannot-evaluate-function-may-be-in-lined-error-in-gdb-for-stl-template-cont?noredirect=1&lq=1 and
+https://stackoverflow.com/questions/40173061/gdb-stl-functions-still-show-as-inlined-after-disabling-optimizations and
+https://github.com/microsoft/vscode-cpptools/issues/69, still I couldn't peek inside from debug console.
+For instance, data("2613081566") would give a prompt of "Cannot evaluate function -- may be inlined", thus i have to use traditional methods like having debug variables etc.. 

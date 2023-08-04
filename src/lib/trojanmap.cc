@@ -589,49 +589,13 @@ void TrojanMap::TSP_aux5(int start,
   }
 }
 
-void TrojanMap::TSP_aux5bt(int start, 
-                          std::vector<std::string> &location_ids,
-                          int cur_node, double cur_cost,
-                          std::vector<int> &cur_path, 
-                          int &rstidx,
-                          std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> &allrecords){
-  // If we are at a leaf, update min_cost and min_path.
-  if (cur_path.size() == location_ids.size()) {
-    double final_cost = cur_cost + CalculateDistance(idxintopstr[cur_node], idxintopstr[start]);
-    std::vector<std::string> cur_pathstr(cur_path.size());
-    // convert the path of ints to path of strings
-    for (int i = 0; i < cur_path.size(); i++){
-      cur_pathstr[i] = idxintopstr[cur_path[i]];
-    }
-    cur_pathstr.push_back(idxintopstr[cur_path[start]]);
-    allrecords.push({final_cost, cur_pathstr});
-    return;
-  }
-  // Early backtracking
-  //if (cur_cost > min_cost) {
-  if (allrecords.size()){
-    if (cur_cost > allrecords.top().first) {
-      return;
-    }
-  }
-  // Else, evaluate all children.
-  for (int i = 0; i < location_ids.size(); i++) {
-    if (std::find(cur_path.begin(), cur_path.end(), i) == cur_path.end()) {
-      cur_path.push_back(i);
-
-      TSP_aux5bt(start, location_ids,i, cur_cost + CalculateDistance(idxintopstr[cur_node], idxintopstr[i]), cur_path, rstidx, allrecords);
-
-      cur_path.pop_back();
-    }
-  }
-}
-
 // Please use backtracking to implement this function
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravelingTrojan_Backtracking(
                                     std::vector<std::string> location_ids) {
   std::pair<double, std::vector<std::vector<std::string>>> records;
   std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> allrecords;
 
+  // mapping std::string ids to int and vice-versa
   std::vector<std::string>::iterator data_itr = location_ids.begin();
   for (int i = 0; i < location_ids.size(); i++){
     idxidopint[*data_itr] = i;
@@ -664,10 +628,87 @@ std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravelingTro
   return records;
 }
 
+
+// Perform a 2-opt swap
+void TrojanMap::do2Opt(std::vector<std::string> &path, int i, int j) {
+  // Reverses the order of the elements in the range [first,last).
+	std::reverse(begin(path) + i + 1, begin(path) + j + 1);
+}
+
 // Hint: https://en.wikipedia.org/wiki/2-opt
 std::pair<double, std::vector<std::vector<std::string>>> TrojanMap::TravelingTrojan_2opt(
       std::vector<std::string> location_ids){
   std::pair<double, std::vector<std::vector<std::string>>> records;
+  std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> allrecords; 
+  
+  // mapping std::string ids to int and vice-versa
+  std::vector<std::string>::iterator data_itr = location_ids.begin();
+  for (int i = 0; i < location_ids.size(); i++){
+    idxidopint[*data_itr] = i;
+    idxintopstr[i] = *data_itr;
+    data_itr++;
+  } 
+
+  std::vector<std::string> ipath;      // std::vector is O(1) for indexing
+  double curLength = 0;
+  int plcCnt = int(location_ids.size());
+  // update first path
+  ipath = location_ids;
+  ipath.push_back(location_ids[0]); 
+  curLength = CalculatePathLength(location_ids) + CalculateDistance(location_ids[0], location_ids[plcCnt-1]);
+  allrecords.push({curLength, ipath});
+  double tenp10epsilon_ = std::pow(10,10)*DBL_EPSILON;
+  //2-opt
+  bool foundImprovement = true;
+	while (foundImprovement) {
+		foundImprovement = false;
+		for (int i = 0; i <= plcCnt - 2; i++) {
+			for (int j = i + 1; j <= plcCnt - 1; j++) {
+        std::string dbgi = idxintopstr[i];
+        std::string dbgip1 = idxintopstr[(i+1)%plcCnt];
+        std::string dbgj = idxintopstr[j];
+        std::string dbgjp1 = idxintopstr[(j+1)%plcCnt];
+				double disitoip1 = CalculateDistance(idxintopstr[i], idxintopstr[(i+1)%plcCnt]);
+				double disjtojp1 = CalculateDistance(idxintopstr[j], idxintopstr[(j+1)%plcCnt]);
+				double disitoj = CalculateDistance(idxintopstr[i], idxintopstr[j]);
+				double disip1tojp1 = CalculateDistance(idxintopstr[(i+1)%plcCnt], idxintopstr[(j+1)%plcCnt]);
+        double lengthDelta = -disitoip1 - disjtojp1 + disitoj + disip1tojp1;
+				// If the length of the path is reduced, do a 2-opt swap
+        if ((lengthDelta < 0) && (std::fabs(lengthDelta) > tenp10epsilon_)) {
+					do2Opt(location_ids, i, j);
+					curLength += lengthDelta;
+          // update each progressive path
+          ipath = location_ids;
+          ipath.push_back(location_ids[0]); 
+          allrecords.push({curLength, ipath});
+					foundImprovement = true;
+          // mapping std::string ids to int and vice-versa
+          data_itr = location_ids.begin();
+          for (int i = 0; i < location_ids.size(); i++){
+            idxidopint[*data_itr] = i;
+            idxintopstr[i] = *data_itr;
+            data_itr++;
+          } 
+				}
+			}
+		}
+	}
+
+  // need to sort the results in descending order of path length
+  bool first = true;
+  while(allrecords.size()){
+    if (first){
+      auto& minele = allrecords.top();
+      records.first = minele.first;
+      records.second.insert(records.second.begin(),minele.second);
+      first = false;
+      allrecords.pop();
+      continue;
+    }
+    auto& ele = allrecords.top();
+    records.second.insert(records.second.begin(),ele.second);
+    allrecords.pop();
+  }
   return records;
 }
 

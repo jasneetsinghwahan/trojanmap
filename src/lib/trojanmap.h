@@ -179,8 +179,7 @@ class TrojanMap {
   void TSP_aux5(int start, std::vector<std::string> &location_ids, int cur_node, double cur_cost, std::vector<int> &cur_path, int &rstidx,
                 std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> &allrecords,
                 bool bt = true);
-  void TSP_aux5bt(int start, std::vector<std::string> &location_ids, int cur_node, double cur_cost, std::vector<int> &cur_path, int &rstidx,
-                std::priority_queue<std::pair<double, std::vector<std::string>>, std::vector<std::pair<double, std::vector<std::string>>>, std::greater<std::pair<double, std::vector<std::string>>>> &allrecords);
+    void do2Opt(std::vector<std::string> &path, int i, int j);
 };
 
 #endif

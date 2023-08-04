@@ -282,16 +282,130 @@
 //}
 
 // Test TSP function
-TEST(TrojanMapTest, TSP1mini) {
+//TEST(TrojanMapTest, TSP1mini) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
+//  auto result = m.TravelingTrojan_Brute_force(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+//
+//TEST(TrojanMapTest, TSP1full) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
+//  auto result = m.TravelingTrojan_Brute_force(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+//
+//TEST(TrojanMapTest, TSPbtmini) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
+//  auto result = m.TravelingTrojan_Backtracking(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+//
+//TEST(TrojanMapTest, TSPbtfull) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
+//  auto result = m.TravelingTrojan_Backtracking(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+
+
+//TEST(TrojanMapTest, TSPbtmid) {
+//  TrojanMap m;
+//  
+////  std::vector<std::string> input{"6819019976","6820935923","8566227656","1873055993","7771782316"}; // Input location ids 
+//  std::vector<std::string> input{"6819019976","6820935923","1873055993","7771782316"}; // Input location ids 
+//  auto result = m.TravelingTrojan_Backtracking(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","7771782316","6820935923","6819019976"}; // Expected order
+//  //std::vector<std::string> gt{"6819019976","1873055993","8566227656","7771782316","6820935923","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+
+
+
+//TEST(TrojanMapTest, TSP2optmini) {
+//  TrojanMap m;
+//  
+//  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
+//  auto result = m.TravelingTrojan_2opt(input);
+//  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
+//  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+//  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
+//  bool flag = false;
+//  if (!result.second.empty() && gt == result.second.back())  // clockwise
+//    flag = true;
+//  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
+//  if (!result.second.empty() && gt == result.second.back())
+//    flag = true;
+//  
+//  EXPECT_EQ(flag, true);
+//}
+
+TEST(TrojanMapTest, TSP2optmid) {
   TrojanMap m;
   
-  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
-  auto result = m.TravelingTrojan_Brute_force(input);
+  std::vector<std::string> input{"6819019976","6820935923","1873055993","7771782316"}; // Input location ids 
+  //std::vector<std::string> input{"6819019976","6820935923","8566227656","1873055993","7771782316"}; // Input location ids 
+  auto result = m.TravelingTrojan_2opt(input);
   std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
-  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+  std::vector<std::string> gt{"6819019976","1873055993","7771782316","6820935923","6819019976"}; // Expected order
   std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
   bool flag = false;
-  if (!result.second.empty() && gt == result.second.back())  // clockwise
+  if (!result.second.empty() && gt == result.second.back()) // clockwise
     flag = true;
   std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
   if (!result.second.empty() && gt == result.second.back())
@@ -300,16 +414,17 @@ TEST(TrojanMapTest, TSP1mini) {
   EXPECT_EQ(flag, true);
 }
 
-TEST(TrojanMapTest, TSP1full) {
+
+TEST(TrojanMapTest, TSP2optfull) {
   TrojanMap m;
   
   std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
-  auto result = m.TravelingTrojan_Brute_force(input);
+  auto result = m.TravelingTrojan_2opt(input);
   std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
   std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
   std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
   bool flag = false;
-  if (!result.second.empty() && gt == result.second.back())  // clockwise
+  if (!result.second.empty() && gt == result.second.back()) // clockwise
     flag = true;
   std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
   if (!result.second.empty() && gt == result.second.back())
@@ -318,34 +433,15 @@ TEST(TrojanMapTest, TSP1full) {
   EXPECT_EQ(flag, true);
 }
 
-TEST(TrojanMapTest, TSPbtmini) {
+TEST(TrojanMapTest, TSP2optfull2) {
   TrojanMap m;
-  
-  std::vector<std::string> input{"6819019976","8566227783","1873055993"}; // Input location ids 
-  auto result = m.TravelingTrojan_Backtracking(input);
+  std::vector<std::string> input{"6792287120","5621075846","2613081566","6817042008","8410528441","2613073713","7863630705","8566227341"};
+  auto result = m.TravelingTrojan_2opt(input);
   std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
-  std::vector<std::string> gt{"6819019976","1873055993","8566227783","6819019976"}; // Expected order
+  std::vector<std::string> gt{"6792287120","6817042008","2613073713","2613081566","5621075846","7863630705","8410528441","8566227341","6792287120"}; // Expected order
   std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
   bool flag = false;
-  if (!result.second.empty() && gt == result.second.back())  // clockwise
-    flag = true;
-  std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
-  if (!result.second.empty() && gt == result.second.back())
-    flag = true;
-  
-  EXPECT_EQ(flag, true);
-}
-
-TEST(TrojanMapTest, TSPbtfull) {
-  TrojanMap m;
-  
-  std::vector<std::string> input{"6819019976","6820935923","122702233","8566227783","8566227656","6816180153","1873055993","7771782316"}; // Input location ids 
-  auto result = m.TravelingTrojan_Backtracking(input);
-  std::cout << "My path length: "  << result.first << "miles" << std::endl; // Print the result path lengths
-  std::vector<std::string> gt{"6819019976","1873055993","8566227656","122702233","8566227783","6816180153","7771782316","6820935923","6819019976"}; // Expected order
-  std::cout << "GT path length: "  << m.CalculatePathLength(gt) << "miles" << std::endl; // Print the gt path lengths
-  bool flag = false;
-  if (!result.second.empty() && gt == result.second.back())  // clockwise
+  if (!result.second.empty() && gt == result.second.back()) // clockwise
     flag = true;
   std::reverse(gt.begin(),gt.end()); // Reverse the expected order because the counterclockwise result is also correct
   if (!result.second.empty() && gt == result.second.back())
