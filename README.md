@@ -77,7 +77,7 @@ Aborted (core dumped)
   + Initially recursive method was tried, but it was too slow, hence, tabulation method was chosen
   + we always try to find min of three operations i.e. replacement or insertion or deletion 
 
-![editdistance_using_tabulation](https://github.com/ee538/sum23-trojanmap-jasneetsinghwahan/blob/main/report/editdistance_using_tabulation.jpg)
+<p align="left"><img src="media/editdistance_using_tabulation.jpg" alt="editdistance_using_tabulation"/></p>
 
 | Query              | prompt     | time spent | reply |
 | -------------------|------------|------------|-------|
@@ -85,7 +85,7 @@ Aborted (core dumped)
 | please             | Chase      |    4 ms    |   y   |
 | thanks             | Chase      |    3 ms    |   n   |
 
-<p align="center"><img src="media/findthelocation.gif" alt="find_the_location_demo" width="500" /></p>
+<p align="left"><img src="media/findthelocation.gif" alt="find_the_location_demo"/></p>
 
 ## Item 3: Get All Categories
 + time complexity: O(n) where n are the number of elements in the database, please note that insertion in unordered_map is O(constant) complexity 
@@ -93,8 +93,11 @@ Aborted (core dumped)
   + data structure: unordered set was used to store the categories, as unordered map is implemented in stl with a characteristics that it doesn't stores duplicates
   + we always try to find min of three operations i.e. replacement or insertion or deletion 
 
+<p align="left"><img src="media/allcategories.gif" alt="allcategories_demo"/></p>
+
 ## Item 4: Get All Locations In A Category
 + time complexity: O(n) as we perform 2 separate instances of parsing the entire database, once to construct the categories list and second time to parse each location for matching attribute same as category 
+<p align="left"><img src="media/alllocations inacategory.gif" alt="all_locations_in_a_category_demo"/></p>
 
 ## Item 5: Get Locations Using A Regular Expression
 + method: we parse the entire database leading to time complexity of O(n) and for each element, we perform reg_ex search that has a complexity of O(n)
@@ -119,7 +122,7 @@ Aborted (core dumped)
 + method: 
   + loop-over V-1 times into E times for each Node/Vertex where E comes from adjacency list and check the distances 
   + each time among the given parents, a parent is found to be the min., we update the parent of that node into parent vector
-![bellman-ford_using_tabulation](https://github.com/ee538/sum23-trojanmap-jasneetsinghwahan/blob/main/report/bellman-ford_using_tabulation.jpg)
+<p align="left"><img src="media/bellman-ford_using_tabulation.jpg" alt="bellman-ford_using_tabulation"/></p>
   + at last, we iterate parents backwards to get the path
 
 ### results
@@ -140,6 +143,9 @@ Aborted (core dumped)
 | Pilgrim Congregational Church to Second Baptist Church                        | 215 ms    | 10613 ms    |
 | United Church of Christ Scientist to American Hungarian Baptist Church        | 263ms     | 10658 ms    |
 | Grace Lutheran Church to Korean Presbyterian Church (나성한인연합장로교회)         | 105ms     | 9193 ms     |
+
+<p align="left"><img src="media/shortestpath.gif" alt="shortest_path_demo"/></p>
+
 
 ## Item 7: Cycle Detection (Phase 2)
 + time complexity: O(V + E)
@@ -169,7 +175,7 @@ Output: false
 Input: square = {-118.290, -118.288, 34.030, 34.0255}
 Output: true
 ```
-
+<p align="left"><img src="media/cycledetection.gif" alt="cycle_detection_demo"/></p>
 
 ## Item 8: Topological Sort (Phase 2)
 + time complexity: 
@@ -206,13 +212,14 @@ location_names = {"Saint Cecilia School", "Saint Patrick School", "Santa Barbara
 dependencies = {{"Saint Cecilia School","Saint Patrick School"}, {"Santa Barbara Avenue School","Saint Patrick School"}, {"Trinity Elementary School","Saint Patrick School"}, {"Twenty-Eight Street Elementary School","Saint Patrick School"},{"Twenty-Eight Street Elementary School","Vermont Elementary School"}, {"Wadsworth Elementary School","Vermont Elementary School"}} 
 Output: {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School", "Vermont Elementary School", "Trinity Elementary School", "Santa Barbara Avenue School", "Saint Cecilia School", "Saint Patrick School"}
 ```
+<p align="left"><img src="media/topologicalsort.gif" alt="topologial_sort_demo"/></p>
 
 ## Item 9: Traveling Salesman (Phase 3)
 ### 2-opt
 + time complexity: 
   + outerloop: till the time we continue to find improvement, can be exponential to subquadratic (source: Tim Roughgarden, )
   + innerloop: replace `each` edge * with all `other` edges in a iteration (the two inner `for` loops) equalling to n*(n-3)/2 or O(n2) for inner loop
-![travelling_salesman_2opt_loop_counter_values](https://github.com/ee538/sum23-trojanmap-jasneetsinghwahan/blob/main/report/tsp_2opt.png)
+<p align="left"><img src="media/tsp_2opt.png" alt="travelling_salesman_2opt_loop_counter_values"/></p>
 
 | Number of Places | Bruteforce | Bruceforce with backtracking |   2-opt    |
 | -----------------|------------|------------------------------|------------|
@@ -220,6 +227,7 @@ Output: {"Wadsworth Elementary School", "Twenty-Eight Street Elementary School",
 |        6         |   1 ms     |             0 ms             |    1 ms    |
 |        7         |   21 ms    |             5 ms             |    0 ms    |
 |        8         |   788 ms   |            27 ms             |    2 ms    | 
+<p align="left"><img src="media/travellingsalesman_7points.gif" alt="travelling_salesman_7points_demo"/></p>
 
 # 3. Time spent for each function.
 # 4. Discussion, conclusion, and lessons learned.
