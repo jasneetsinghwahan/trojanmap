@@ -4,6 +4,7 @@ TrojanMap is class-project as part of EE538: Computing Principles for EE. This p
 + finding shortest path between source and destination using dijkstra and bellman-ford (thereby allowing its implementation in graphs with -ve distances)
 + topological sort with applications like dependency resolution
 + classic travelling salesman that is implemented using various approaches like brute-force, bruceforce with backtracking and local search (2-opt)
+
 The project involves showcasing the results on a map using OpenCV integration
 
 ## Data structure
@@ -244,3 +245,13 @@ For instance, data("2613081566") would give a prompt of "Cannot evaluate functio
 
 ### unable to set breakpoints for string literals
 - tried this approach https://stackoverflow.com/questions/1740858/how-to-create-conditional-breakpoint-with-stdstring to edit break point to set for a speciifc string value, but it didn't work 
+
+## Video link
+<div align="left">
+      <a href="https://youtu.be/GD3CYvLcmWk">
+     <img 
+      src="media/video_cover_page.png" 
+      alt="EE538_Presentation" 
+      style="width:100%;">
+      </a>
+    </div>
