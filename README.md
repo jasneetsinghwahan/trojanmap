@@ -147,6 +147,7 @@ Aborted (core dumped)
 
 <p align="left"><img src="media/shortestpath.gif" alt="shortest_path_demo"/></p>
 
+<p align="left"><img src="media/trojanmap_gmaps_TrinityElementarySchool_to_Twenty-Eight StreetElementarySchool.png" alt="shortest_path_demo"/></p>
 
 ## Item 7: Cycle Detection (Phase 2)
 + time complexity: O(V + E)
